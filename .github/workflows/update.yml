@@ -26,6 +26,40 @@ jobs:
 
           API = "https://api.github.com/repos/Au1rxx/free-vpn-subscriptions/contents/output/by-country"
 
+          country_names = {
+              "US": "United States",
+              "JP": "Japan",
+              "DE": "Germany",
+              "GB": "United Kingdom",
+              "FR": "France",
+              "NL": "Netherlands",
+              "CA": "Canada",
+              "SG": "Singapore",
+              "HK": "Hong Kong",
+              "KR": "South Korea",
+              "TW": "Taiwan",
+              "RU": "Russia",
+              "FI": "Finland",
+              "SE": "Sweden",
+              "CH": "Switzerland",
+              "PL": "Poland",
+              "AU": "Australia",
+              "IN": "India",
+              "TR": "Turkey",
+              "BR": "Brazil",
+              "IT": "Italy",
+              "ES": "Spain",
+              "NO": "Norway",
+              "DK": "Denmark",
+              "BE": "Belgium",
+              "AT": "Austria",
+              "CZ": "Czech Republic",
+              "RO": "Romania",
+              "UA": "Ukraine",
+              "IL": "Israel",
+              "AE": "United Arab Emirates"
+          }
+
           req = urllib.request.Request(
               API,
               headers={"User-Agent": "HY2-Updater"}
@@ -38,13 +72,12 @@ jobs:
           seen = set()
 
           for file in files:
-              name = file.get("name", "")
+              filename = file.get("name", "")
 
-              # Only country sing-box files
-              if not name.startswith("singbox-") or not name.endswith(".json"):
+              if not filename.startswith("singbox-") or not filename.endswith(".json"):
                   continue
 
-              country = name[len("singbox-"):-5].upper()
+              country = filename[len("singbox-"):-5].upper()
 
               try:
                   req = urllib.request.Request(
@@ -56,10 +89,11 @@ jobs:
                       data = json.load(r)
 
               except Exception as e:
-                  print(f"Failed: {name}: {e}")
+                  print(f"Failed to download {filename}: {e}")
                   continue
 
               for node in data.get("outbounds", []):
+
                   if node.get("type") != "hysteria2":
                       continue
 
@@ -74,35 +108,42 @@ jobs:
                   sni = tls.get("server_name", "")
                   insecure = tls.get("insecure", False)
 
-                  # Remove obviously invalid SNI values
                   if sni and (
-                      sni.startswith("http://") or
-                      sni.startswith("https://")
+                      sni.startswith("http://")
+                      or sni.startswith("https://")
                   ):
                       sni = ""
 
                   # IPv6 support
-                  host = server
+                  host = str(server)
+
                   if ":" in host and not host.startswith("["):
                       host = f"[{host}]"
 
-                  password_encoded = quote(str(password), safe="")
-                  uri = f"hysteria2://{password_encoded}@{host}:{port}/?"
+                  password_encoded = quote(
+                      str(password),
+                      safe=""
+                  )
+
+                  uri = (
+                      f"hysteria2://"
+                      f"{password_encoded}@"
+                      f"{host}:{port}/?"
+                  )
 
                   params = []
 
                   if sni:
-                      params.append("sni=" + quote(str(sni), safe=""))
+                      params.append(
+                          "sni=" + quote(str(sni), safe="")
+                      )
 
                   if insecure:
                       params.append("insecure=1")
 
                   uri += "&".join(params)
 
-                  tag = node.get("tag", "Hysteria2")
-                  uri += "#" + quote(str(tag), safe="")
-
-                  # Remove duplicates
+                  # Duplicate detection
                   key = (
                       str(server),
                       int(port),
@@ -116,29 +157,61 @@ jobs:
                   seen.add(key)
 
                   servers.append({
-                      "name": tag,
                       "countryCode": country,
                       "config": uri
                   })
 
-          # Sort by country then name
+          # Sort servers by country
           servers.sort(
               key=lambda x: (
                   x["countryCode"],
-                  x["name"]
+                  x["config"]
               )
           )
 
+          # Number servers per country
+          counters = {}
+
+          for server in servers:
+
+              country = server["countryCode"]
+
+              counters[country] = counters.get(country, 0) + 1
+
+              country_name = country_names.get(
+                  country,
+                  country
+              )
+
+              server["name"] = (
+                  f"{country_name} "
+                  f"{counters[country]}"
+              )
+
+          # Keep clean field order
+          final_servers = []
+
+          for server in servers:
+              final_servers.append({
+                  "name": server["name"],
+                  "countryCode": server["countryCode"],
+                  "config": server["config"]
+              })
+
           Path("services.json").write_text(
               json.dumps(
-                  servers,
+                  final_servers,
                   ensure_ascii=False,
                   indent=2
               ) + "\n",
               encoding="utf-8"
           )
 
-          print(f"HY2 servers: {len(servers)}")
+          print(
+              f"Total HY2 servers: "
+              f"{len(final_servers)}"
+          )
+
           PY
 
       - name: Commit changes
