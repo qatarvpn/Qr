@@ -71,16 +71,20 @@ jobs:
               headers={"User-Agent": "HY2-Updater"}
           )
 
-          with urllib.request.urlopen(req) as r:
+          with urllib.request.urlopen(req, timeout=30) as r:
               files = json.load(r)
 
           servers = []
           seen = set()
 
           for file in files:
+
               filename = file.get("name", "")
 
-              if not filename.startswith("singbox-") or not filename.endswith(".json"):
+              if not filename.startswith("singbox-"):
+                  continue
+
+              if not filename.endswith(".json"):
                   continue
 
               country = filename[len("singbox-"):-5].upper()
@@ -100,6 +104,7 @@ jobs:
 
               for node in data.get("outbounds", []):
 
+                  # HY2 only
                   if node.get("type") != "hysteria2":
                       continue
 
@@ -111,9 +116,11 @@ jobs:
                       continue
 
                   tls = node.get("tls", {})
+
                   sni = tls.get("server_name", "")
                   insecure = tls.get("insecure", False)
 
+                  # Ignore invalid SNI values
                   if sni and (
                       sni.startswith("http://")
                       or sni.startswith("https://")
@@ -126,11 +133,13 @@ jobs:
                   if ":" in host and not host.startswith("["):
                       host = f"[{host}]"
 
+                  # Encode password
                   password_encoded = quote(
                       str(password),
                       safe=""
                   )
 
+                  # Build HY2 URI
                   uri = (
                       f"hysteria2://"
                       f"{password_encoded}@"
@@ -141,7 +150,10 @@ jobs:
 
                   if sni:
                       params.append(
-                          "sni=" + quote(str(sni), safe="")
+                          "sni=" + quote(
+                              str(sni),
+                              safe=""
+                          )
                       )
 
                   if insecure:
@@ -149,7 +161,7 @@ jobs:
 
                   uri += "&".join(params)
 
-                  # Remove duplicates
+                  # Remove duplicate servers
                   key = (
                       str(server),
                       int(port),
@@ -167,7 +179,7 @@ jobs:
                       "config": uri
                   })
 
-          # Sort by country and config
+          # Sort
           servers.sort(
               key=lambda x: (
                   x["countryCode"],
@@ -182,7 +194,9 @@ jobs:
 
               country = server["countryCode"]
 
-              counters[country] = counters.get(country, 0) + 1
+              counters[country] = (
+                  counters.get(country, 0) + 1
+              )
 
               country_name = country_names.get(
                   country,
@@ -194,16 +208,18 @@ jobs:
                   f"{counters[country]}"
               )
 
-          # Final JSON
+          # Build final JSON
           final_servers = []
 
           for server in servers:
+
               final_servers.append({
                   "name": server["name"],
                   "countryCode": server["countryCode"],
                   "config": server["config"]
               })
 
+          # Save services.json
           Path("services.json").write_text(
               json.dumps(
                   final_servers,
@@ -220,7 +236,7 @@ jobs:
 
           PY
 
-      - name: Commit changes
+      - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -228,12 +244,34 @@ jobs:
           git add services.json
 
           if git diff --cached --quiet; then
-            echo "No changes"
+            echo "No changes detected."
             exit 0
           fi
 
           git commit -m "Update HY2 servers"
 
-          git pull --rebase origin main
+          for i in 1 2 3 4 5; do
 
-          git push origin main
+            echo "Push attempt $i..."
+
+            git fetch origin main
+
+            git rebase origin/main || {
+              echo "Rebase failed."
+              git rebase --abort || true
+              exit 1
+            }
+
+            if git push origin HEAD:main; then
+              echo "Push successful."
+              exit 0
+            fi
+
+            echo "Push failed. Retrying..."
+
+            sleep 2
+
+          done
+
+          echo "Push failed after 5 attempts."
+          exit 1
