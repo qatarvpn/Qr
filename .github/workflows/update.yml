@@ -1,0 +1,156 @@
+name: Update HY2 Servers
+
+on:
+  schedule:
+    - cron: "15 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download and build HY2 list
+        run: |
+          python3 <<'PY'
+          import json
+          import urllib.request
+          from urllib.parse import quote
+          from pathlib import Path
+
+          API = "https://api.github.com/repos/Au1rxx/free-vpn-subscriptions/contents/output/by-country"
+
+          req = urllib.request.Request(
+              API,
+              headers={"User-Agent": "HY2-Updater"}
+          )
+
+          with urllib.request.urlopen(req) as r:
+              files = json.load(r)
+
+          servers = []
+          seen = set()
+
+          for file in files:
+              name = file.get("name", "")
+
+              # Only country sing-box files
+              if not name.startswith("singbox-") or not name.endswith(".json"):
+                  continue
+
+              country = name[len("singbox-"):-5].upper()
+
+              try:
+                  req = urllib.request.Request(
+                      file["download_url"],
+                      headers={"User-Agent": "HY2-Updater"}
+                  )
+
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      data = json.load(r)
+
+              except Exception as e:
+                  print(f"Failed: {name}: {e}")
+                  continue
+
+              for node in data.get("outbounds", []):
+                  if node.get("type") != "hysteria2":
+                      continue
+
+                  server = node.get("server")
+                  port = node.get("server_port")
+                  password = node.get("password")
+
+                  if not server or not port or not password:
+                      continue
+
+                  tls = node.get("tls", {})
+                  sni = tls.get("server_name", "")
+                  insecure = tls.get("insecure", False)
+
+                  # Remove obviously invalid SNI values
+                  if sni and (
+                      sni.startswith("http://") or
+                      sni.startswith("https://")
+                  ):
+                      sni = ""
+
+                  # IPv6 support
+                  host = server
+                  if ":" in host and not host.startswith("["):
+                      host = f"[{host}]"
+
+                  password_encoded = quote(str(password), safe="")
+                  uri = f"hysteria2://{password_encoded}@{host}:{port}/?"
+
+                  params = []
+
+                  if sni:
+                      params.append("sni=" + quote(str(sni), safe=""))
+
+                  if insecure:
+                      params.append("insecure=1")
+
+                  uri += "&".join(params)
+
+                  tag = node.get("tag", "Hysteria2")
+                  uri += "#" + quote(str(tag), safe="")
+
+                  # Remove duplicates
+                  key = (
+                      str(server),
+                      int(port),
+                      str(password),
+                      str(sni)
+                  )
+
+                  if key in seen:
+                      continue
+
+                  seen.add(key)
+
+                  servers.append({
+                      "name": tag,
+                      "countryCode": country,
+                      "config": uri
+                  })
+
+          # Sort by country then name
+          servers.sort(
+              key=lambda x: (
+                  x["countryCode"],
+                  x["name"]
+              )
+          )
+
+          Path("services.json").write_text(
+              json.dumps(
+                  servers,
+                  ensure_ascii=False,
+                  indent=2
+              ) + "\n",
+              encoding="utf-8"
+          )
+
+          print(f"HY2 servers: {len(servers)}")
+          PY
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add services.json
+
+          if git diff --cached --quiet; then
+            echo "No changes"
+          else
+            git commit -m "Update HY2 servers"
+            git push
+          fi
