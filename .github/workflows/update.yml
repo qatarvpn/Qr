@@ -267,6 +267,17 @@ jobs:
 
             echo "Push attempt $i..."
 
+            # Always get the latest remote version
+            git fetch origin main
+
+            # Rebase our commit on the latest main
+            git rebase origin/main || {
+              echo "Rebase failed."
+              git rebase --abort || true
+              exit 1
+            }
+
+            # Push
             if git push origin HEAD:main; then
               echo "Push successful."
               exit 0
@@ -275,17 +286,8 @@ jobs:
             echo "Push failed."
 
             if [ "$i" -lt 5 ]; then
-              echo "Fetching latest main..."
-
-              git fetch origin main
-
-              git rebase origin/main || {
-                echo "Rebase failed."
-                git rebase --abort || true
-                exit 1
-              }
-
-              sleep 2
+              echo "Retrying in 3 seconds..."
+              sleep 3
             fi
 
           done
