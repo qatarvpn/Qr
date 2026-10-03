@@ -95,21 +95,15 @@ jobs:
                       headers={"User-Agent": "HY2-Updater"}
                   )
 
-                  with urllib.request.urlopen(
-                      req,
-                      timeout=30
-                  ) as response:
+                  with urllib.request.urlopen(req, timeout=30) as response:
                       data = json.load(response)
 
               except Exception as e:
-                  print(
-                      f"Failed to download {filename}: {e}"
-                  )
+                  print(f"Failed to download {filename}: {e}")
                   continue
 
               for node in data.get("outbounds", []):
 
-                  # Hysteria2 only
                   if node.get("type") != "hysteria2":
                       continue
 
@@ -125,7 +119,6 @@ jobs:
                   sni = tls.get("server_name", "")
                   insecure = tls.get("insecure", False)
 
-                  # Ignore invalid SNI
                   if sni and (
                       sni.startswith("http://")
                       or sni.startswith("https://")
@@ -134,7 +127,6 @@ jobs:
 
                   host = str(server)
 
-                  # IPv6 support
                   if ":" in host and not host.startswith("["):
                       host = f"[{host}]"
 
@@ -164,7 +156,6 @@ jobs:
 
                   uri += "&".join(params)
 
-                  # Duplicate detection
                   key = (
                       str(server),
                       int(port),
@@ -182,7 +173,6 @@ jobs:
                       "config": uri
                   })
 
-          # Sort servers
           servers.sort(
               key=lambda x: (
                   x["countryCode"],
@@ -190,7 +180,6 @@ jobs:
               )
           )
 
-          # Number servers per country
           counters = {}
 
           for server in servers:
@@ -211,18 +200,15 @@ jobs:
                   f"{counters[country]}"
               )
 
-          # Build final JSON
           final_servers = []
 
           for server in servers:
-
               final_servers.append({
                   "name": server["name"],
                   "countryCode": server["countryCode"],
                   "config": server["config"]
               })
 
-          # Save services.json
           Path("services.json").write_text(
               json.dumps(
                   final_servers,
@@ -239,17 +225,7 @@ jobs:
 
           PY
 
-      - name: Sync with remote
-        run: |
-          git fetch origin main
-
-          git rebase origin/main || {
-            echo "Rebase failed."
-            git rebase --abort || true
-            exit 1
-          }
-
-      - name: Commit and push changes
+      - name: Commit changes
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -263,21 +239,20 @@ jobs:
 
           git commit -m "Update HY2 servers"
 
+      - name: Push changes
+        run: |
           for i in 1 2 3 4 5; do
 
             echo "Push attempt $i..."
 
-            # Always get the latest remote version
             git fetch origin main
 
-            # Rebase our commit on the latest main
             git rebase origin/main || {
               echo "Rebase failed."
               git rebase --abort || true
               exit 1
             }
 
-            # Push
             if git push origin HEAD:main; then
               echo "Push successful."
               exit 0
