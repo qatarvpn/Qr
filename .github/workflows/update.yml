@@ -5,6 +5,10 @@ on:
     - cron: "15 * * * *"
   workflow_dispatch:
 
+concurrency:
+  group: update-hy2
+  cancel-in-progress: true
+
 permissions:
   contents: write
 
@@ -15,6 +19,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Download and build HY2 list
         run: |
@@ -114,9 +120,9 @@ jobs:
                   ):
                       sni = ""
 
-                  # IPv6 support
                   host = str(server)
 
+                  # IPv6 support
                   if ":" in host and not host.startswith("["):
                       host = f"[{host}]"
 
@@ -143,7 +149,7 @@ jobs:
 
                   uri += "&".join(params)
 
-                  # Duplicate detection
+                  # Remove duplicates
                   key = (
                       str(server),
                       int(port),
@@ -161,7 +167,7 @@ jobs:
                       "config": uri
                   })
 
-          # Sort servers by country
+          # Sort by country and config
           servers.sort(
               key=lambda x: (
                   x["countryCode"],
@@ -188,7 +194,7 @@ jobs:
                   f"{counters[country]}"
               )
 
-          # Keep clean field order
+          # Final JSON
           final_servers = []
 
           for server in servers:
@@ -223,7 +229,11 @@ jobs:
 
           if git diff --cached --quiet; then
             echo "No changes"
-          else
-            git commit -m "Update HY2 servers"
-            git push
+            exit 0
           fi
+
+          git commit -m "Update HY2 servers"
+
+          git pull --rebase origin main
+
+          git push origin main
