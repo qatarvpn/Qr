@@ -71,8 +71,8 @@ jobs:
               headers={"User-Agent": "HY2-Updater"}
           )
 
-          with urllib.request.urlopen(req, timeout=30) as r:
-              files = json.load(r)
+          with urllib.request.urlopen(req, timeout=30) as response:
+              files = json.load(response)
 
           servers = []
           seen = set()
@@ -95,16 +95,21 @@ jobs:
                       headers={"User-Agent": "HY2-Updater"}
                   )
 
-                  with urllib.request.urlopen(req, timeout=30) as r:
-                      data = json.load(r)
+                  with urllib.request.urlopen(
+                      req,
+                      timeout=30
+                  ) as response:
+                      data = json.load(response)
 
               except Exception as e:
-                  print(f"Failed to download {filename}: {e}")
+                  print(
+                      f"Failed to download {filename}: {e}"
+                  )
                   continue
 
               for node in data.get("outbounds", []):
 
-                  # HY2 only
+                  # Hysteria2 only
                   if node.get("type") != "hysteria2":
                       continue
 
@@ -120,7 +125,7 @@ jobs:
                   sni = tls.get("server_name", "")
                   insecure = tls.get("insecure", False)
 
-                  # Ignore invalid SNI values
+                  # Ignore invalid SNI
                   if sni and (
                       sni.startswith("http://")
                       or sni.startswith("https://")
@@ -133,13 +138,11 @@ jobs:
                   if ":" in host and not host.startswith("["):
                       host = f"[{host}]"
 
-                  # Encode password
                   password_encoded = quote(
                       str(password),
                       safe=""
                   )
 
-                  # Build HY2 URI
                   uri = (
                       f"hysteria2://"
                       f"{password_encoded}@"
@@ -161,7 +164,7 @@ jobs:
 
                   uri += "&".join(params)
 
-                  # Remove duplicate servers
+                  # Duplicate detection
                   key = (
                       str(server),
                       int(port),
@@ -179,7 +182,7 @@ jobs:
                       "config": uri
                   })
 
-          # Sort
+          # Sort servers
           servers.sort(
               key=lambda x: (
                   x["countryCode"],
@@ -236,6 +239,16 @@ jobs:
 
           PY
 
+      - name: Sync with remote
+        run: |
+          git fetch origin main
+
+          git rebase origin/main || {
+            echo "Rebase failed."
+            git rebase --abort || true
+            exit 1
+          }
+
       - name: Commit and push changes
         run: |
           git config user.name "github-actions[bot]"
@@ -254,22 +267,26 @@ jobs:
 
             echo "Push attempt $i..."
 
-            git fetch origin main
-
-            git rebase origin/main || {
-              echo "Rebase failed."
-              git rebase --abort || true
-              exit 1
-            }
-
             if git push origin HEAD:main; then
               echo "Push successful."
               exit 0
             fi
 
-            echo "Push failed. Retrying..."
+            echo "Push failed."
 
-            sleep 2
+            if [ "$i" -lt 5 ]; then
+              echo "Fetching latest main..."
+
+              git fetch origin main
+
+              git rebase origin/main || {
+                echo "Rebase failed."
+                git rebase --abort || true
+                exit 1
+              }
+
+              sleep 2
+            fi
 
           done
 
