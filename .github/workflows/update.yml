@@ -12,6 +12,16 @@ concurrency:
 permissions:
   contents: write
 
+env:
+  # The app reads this file (ServerApiService.kt -> .../servers.json). Change if your app path differs.
+  OUTPUT_FILE: servers.json
+  # 1 = drop servers with insecure=1 (certificate verification disabled). Strongly recommended.
+  DROP_INSECURE: "1"
+  # Max servers kept per country (0 = unlimited)
+  MAX_PER_COUNTRY: "10"
+  # Safety net: if fewer servers than this survive the filters, keep the old file untouched
+  MIN_SERVERS: "3"
+
 jobs:
   update:
     runs-on: ubuntu-latest
@@ -22,207 +32,187 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download and build HY2 list
+      - name: Download, filter and build HY2 list
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
         run: |
           python3 <<'PY'
           import json
+          import os
+          import re
+          import socket
+          import sys
           import urllib.request
-          from urllib.parse import quote
+          from concurrent.futures import ThreadPoolExecutor
           from pathlib import Path
+          from urllib.parse import quote
 
           API = "https://api.github.com/repos/Au1rxx/free-vpn-subscriptions/contents/output/by-country"
 
+          OUTPUT_FILE = os.environ.get("OUTPUT_FILE", "servers.json")
+          DROP_INSECURE = os.environ.get("DROP_INSECURE", "1") == "1"
+          MAX_PER_COUNTRY = int(os.environ.get("MAX_PER_COUNTRY", "10"))
+          MIN_SERVERS = int(os.environ.get("MIN_SERVERS", "3"))
+
           country_names = {
-              "US": "United States",
-              "JP": "Japan",
-              "DE": "Germany",
-              "GB": "United Kingdom",
-              "FR": "France",
-              "NL": "Netherlands",
-              "CA": "Canada",
-              "SG": "Singapore",
-              "HK": "Hong Kong",
-              "KR": "South Korea",
-              "TW": "Taiwan",
-              "RU": "Russia",
-              "FI": "Finland",
-              "SE": "Sweden",
-              "CH": "Switzerland",
-              "PL": "Poland",
-              "AU": "Australia",
-              "IN": "India",
-              "TR": "Turkey",
-              "BR": "Brazil",
-              "IT": "Italy",
-              "ES": "Spain",
-              "NO": "Norway",
-              "DK": "Denmark",
-              "BE": "Belgium",
-              "AT": "Austria",
-              "CZ": "Czech Republic",
-              "RO": "Romania",
-              "UA": "Ukraine",
-              "IL": "Israel",
-              "AE": "United Arab Emirates"
+              "US": "United States", "JP": "Japan", "DE": "Germany", "GB": "United Kingdom",
+              "FR": "France", "NL": "Netherlands", "CA": "Canada", "SG": "Singapore",
+              "HK": "Hong Kong", "KR": "South Korea", "TW": "Taiwan", "RU": "Russia",
+              "FI": "Finland", "SE": "Sweden", "CH": "Switzerland", "PL": "Poland",
+              "AU": "Australia", "IN": "India", "TR": "Turkey", "BR": "Brazil",
+              "IT": "Italy", "ES": "Spain", "NO": "Norway", "DK": "Denmark",
+              "BE": "Belgium", "AT": "Austria", "CZ": "Czech Republic", "RO": "Romania",
+              "UA": "Ukraine", "IL": "Israel", "AE": "United Arab Emirates"
           }
 
-          req = urllib.request.Request(
-              API,
-              headers={"User-Agent": "HY2-Updater"}
-          )
+          HOSTNAME = re.compile(r"^[A-Za-z0-9]([A-Za-z0-9.-]{0,251}[A-Za-z0-9])?$")
+          IPV4 = re.compile(r"^\d{1,3}(\.\d{1,3}){3}$")
 
-          with urllib.request.urlopen(req, timeout=30) as response:
-              files = json.load(response)
 
-          servers = []
+          def is_ip(host):
+              return bool(IPV4.match(host)) or ":" in host
+
+
+          def fetch_json(url):
+              headers = {"User-Agent": "HY2-Updater"}
+              token = os.environ.get("GITHUB_TOKEN")
+              if token and url.startswith("https://api.github.com/"):
+                  headers["Authorization"] = f"Bearer {token}"
+              req = urllib.request.Request(url, headers=headers)
+              with urllib.request.urlopen(req, timeout=30) as response:
+                  return json.load(response)
+
+
+          def clean_sni(value):
+              """Valid hostname/IP or empty string (drops 'off', URLs, garbage)."""
+              v = str(value or "").strip().rstrip(".")
+              if not v or v.lower() in ("off", "none"):
+                  return ""
+              return v if HOSTNAME.match(v) else ""
+
+
+          files = fetch_json(API)
+
+          candidates = []
           seen = set()
 
           for file in files:
-
               filename = file.get("name", "")
-
-              if not filename.startswith("singbox-"):
-                  continue
-
-              if not filename.endswith(".json"):
+              if not (filename.startswith("singbox-") and filename.endswith(".json")):
                   continue
 
               country = filename[len("singbox-"):-5].upper()
 
               try:
-                  req = urllib.request.Request(
-                      file["download_url"],
-                      headers={"User-Agent": "HY2-Updater"}
-                  )
-
-                  with urllib.request.urlopen(req, timeout=30) as response:
-                      data = json.load(response)
-
+                  data = fetch_json(file["download_url"])
               except Exception as e:
                   print(f"Failed to download {filename}: {e}")
                   continue
 
               for node in data.get("outbounds", []):
-
                   if node.get("type") != "hysteria2":
                       continue
 
                   server = node.get("server")
                   port = node.get("server_port")
                   password = node.get("password")
-
                   if not server or not port or not password:
                       continue
 
-                  tls = node.get("tls", {})
+                  tls = node.get("tls", {}) or {}
+                  insecure = bool(tls.get("insecure", False))
+                  if insecure and DROP_INSECURE:
+                      continue
 
-                  sni = tls.get("server_name", "")
-                  insecure = tls.get("insecure", False)
+                  sni = clean_sni(tls.get("server_name", ""))
 
-                  if sni and (
-                      sni.startswith("http://")
-                      or sni.startswith("https://")
-                  ):
-                      sni = ""
+                  # same server + port + password = same node, whatever the sni is
+                  key = (str(server).lower(), int(port), str(password))
+                  if key in seen:
+                      continue
+                  seen.add(key)
 
                   host = str(server)
-
-                  if ":" in host and not host.startswith("["):
-                      host = f"[{host}]"
-
-                  password_encoded = quote(
-                      str(password),
-                      safe=""
-                  )
-
-                  uri = (
-                      f"hysteria2://"
-                      f"{password_encoded}@"
-                      f"{host}:{port}/?"
-                  )
+                  bracketed = f"[{host}]" if ":" in host and not host.startswith("[") else host
 
                   params = []
-
                   if sni:
-                      params.append(
-                          "sni=" + quote(
-                              str(sni),
-                              safe=""
-                          )
-                      )
-
+                      params.append("sni=" + quote(sni, safe=""))
                   if insecure:
                       params.append("insecure=1")
 
-                  uri += "&".join(params)
+                  # obfuscation (salamander) - without it these servers cannot connect
+                  obfs = node.get("obfs") or {}
+                  if obfs.get("type") and obfs.get("password"):
+                      params.append("obfs=" + quote(str(obfs["type"]), safe=""))
+                      params.append("obfs-password=" + quote(str(obfs["password"]), safe=""))
 
-                  key = (
-                      str(server),
-                      int(port),
-                      str(password),
-                      str(sni)
-                  )
+                  # port hopping
+                  ports = node.get("server_ports") or []
+                  if ports:
+                      params.append("mport=" + quote(",".join(str(p) for p in ports), safe=","))
 
-                  if key in seen:
-                      continue
+                  uri = f"hysteria2://{quote(str(password), safe='')}@{bracketed}:{port}/?" + "&".join(params)
 
-                  seen.add(key)
+                  # servers with a real hostname for sni are more likely to have a valid certificate
+                  quality = 0 if (sni and not is_ip(sni)) else 1
 
-                  servers.append({
+                  candidates.append({
                       "countryCode": country,
-                      "config": uri
+                      "config": uri,
+                      "host": host.strip("[]"),
+                      "quality": quality,
                   })
 
-          servers.sort(
-              key=lambda x: (
-                  x["countryCode"],
-                  x["config"]
-              )
-          )
+          candidates.sort(key=lambda x: (x["countryCode"], x["quality"], x["config"]))
+
+          # limit per country
+          servers = []
+          per_country = {}
+          for c in candidates:
+              n = per_country.get(c["countryCode"], 0)
+              if MAX_PER_COUNTRY and n >= MAX_PER_COUNTRY:
+                  continue
+              per_country[c["countryCode"]] = n + 1
+              servers.append(c)
+
+          # resolve hostnames -> ip (shown in the app list)
+          def resolve(host):
+              if is_ip(host):
+                  return host
+              try:
+                  return socket.gethostbyname(host)
+              except OSError:
+                  return None
+
+          socket.setdefaulttimeout(5)
+          with ThreadPoolExecutor(max_workers=16) as pool:
+              ips = list(pool.map(resolve, [s["host"] for s in servers]))
 
           counters = {}
-
-          for server in servers:
-
-              country = server["countryCode"]
-
-              counters[country] = (
-                  counters.get(country, 0) + 1
-              )
-
-              country_name = country_names.get(
-                  country,
-                  country
-              )
-
-              server["name"] = (
-                  f"{country_name} "
-                  f"{counters[country]}"
-              )
-
           final_servers = []
+          for server, ip in zip(servers, ips):
+              country = server["countryCode"]
+              counters[country] = counters.get(country, 0) + 1
+              entry = {
+                  "name": f"{country_names.get(country, country)} {counters[country]}",
+                  "countryCode": country,
+              }
+              if ip:
+                  entry["ip"] = ip
+              entry["config"] = server["config"]
+              final_servers.append(entry)
 
-          for server in servers:
-              final_servers.append({
-                  "name": server["name"],
-                  "countryCode": server["countryCode"],
-                  "config": server["config"]
-              })
+          print(f"Total HY2 servers: {len(final_servers)}")
 
-          Path("services.json").write_text(
-              json.dumps(
-                  final_servers,
-                  ensure_ascii=False,
-                  indent=2
-              ) + "\n",
-              encoding="utf-8"
+          if len(final_servers) < MIN_SERVERS:
+              print(f"Too few servers ({len(final_servers)} < {MIN_SERVERS}); keeping the existing file.")
+              sys.exit(0)
+
+          Path(OUTPUT_FILE).write_text(
+              json.dumps(final_servers, ensure_ascii=False, indent=2) + "\n",
+              encoding="utf-8",
           )
-
-          print(
-              f"Total HY2 servers: "
-              f"{len(final_servers)}"
-          )
-
           PY
 
       - name: Commit changes
@@ -230,7 +220,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
-          git add services.json
+          git add "$OUTPUT_FILE"
 
           if git diff --cached --quiet; then
             echo "No changes detected."
