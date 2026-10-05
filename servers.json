@@ -1,0 +1,140 @@
+[
+  {
+    "name": "Switzerland 1",
+    "countryCode": "CH",
+    "ip": "82.38.64.229",
+    "config": "hysteria2://we9_I1893UFj3149xbr1_k8qvJ8734ic_Mx82gH@82.38.64.229:8443/?sni=hopp-swizland-new.mysynology.net"
+  },
+  {
+    "name": "Germany 1",
+    "countryCode": "DE",
+    "ip": "162.249.127.144",
+    "config": "hysteria2://9Me_Jx935gnHx13_Nx45M_NYXe037js_Be4z@162.249.127.144:8443/?sni=hop-germany-september.dynuddns.com"
+  },
+  {
+    "name": "Germany 2",
+    "countryCode": "DE",
+    "ip": "162.249.127.146",
+    "config": "hysteria2://9Me_Jx935gnHx13_Nx45M_NYXe037js_Be4z@162.249.127.146:8443/?sni=hop-germany-september.dynuddns.com"
+  },
+  {
+    "name": "Hong Kong 1",
+    "countryCode": "HK",
+    "ip": "43.161.230.103",
+    "config": "hysteria2://HysTeria2026%21Proxy@43.161.230.103:8443/?sni=mz.hkychina.com"
+  },
+  {
+    "name": "Hong Kong 2",
+    "countryCode": "HK",
+    "ip": "43.161.230.103",
+    "config": "hysteria2://HysTeria2026%21Proxy@mz.hkychina.com:8443/?sni=mz.hkychina.com"
+  },
+  {
+    "name": "Japan 1",
+    "countryCode": "JP",
+    "ip": "203.198.86.243",
+    "config": "hysteria2://61c4be90-6235-11ec-a8bf-f23c91cfbbc9@4e3ff39f-tmm5c0-tr9h64-1f1f1.nw4.hyhuawei.com:443/?sni=4e3ff39f-tmm5c0-tr9h64-1f1f1.nw4.hyhuawei.com"
+  },
+  {
+    "name": "Japan 2",
+    "countryCode": "JP",
+    "ip": "45.32.10.7",
+    "config": "hysteria2://96ab5cd282733fd4c312a61f972f330a@45.32.10.7:443/?sni=vp3.yysyy.online"
+  },
+  {
+    "name": "Japan 3",
+    "countryCode": "JP",
+    "ip": "45.32.10.7",
+    "config": "hysteria2://96ab5cd282733fd4c312a61f972f330a@vp3.yysyy.online:443/?sni=vp3.yysyy.online"
+  },
+  {
+    "name": "Japan 4",
+    "countryCode": "JP",
+    "ip": "132.226.14.77",
+    "config": "hysteria2://my_super_password_123@132.226.14.77:443/?sni=open.w2m.ink"
+  },
+  {
+    "name": "Japan 5",
+    "countryCode": "JP",
+    "ip": "132.226.14.77",
+    "config": "hysteria2://my_super_password_123@132.226.14.77:5443/?sni=open.w2m.ink"
+  },
+  {
+    "name": "Japan 6",
+    "countryCode": "JP",
+    "ip": "158.101.148.79",
+    "config": "hysteria2://my_super_password_123@158.101.148.79:443/?sni=open.2ml.bid"
+  },
+  {
+    "name": "Japan 7",
+    "countryCode": "JP",
+    "ip": "158.101.148.79",
+    "config": "hysteria2://my_super_password_123@158.101.148.79:5443/?sni=open.2ml.bid"
+  },
+  {
+    "name": "Japan 8",
+    "countryCode": "JP",
+    "ip": "158.101.148.79",
+    "config": "hysteria2://my_super_password_123@open.2ml.bid:5443/?sni=open.2ml.bid"
+  },
+  {
+    "name": "Japan 9",
+    "countryCode": "JP",
+    "ip": "132.226.14.77",
+    "config": "hysteria2://my_super_password_123@open.w2m.ink:443/?sni=open.w2m.ink"
+  },
+  {
+    "name": "Japan 10",
+    "countryCode": "JP",
+    "ip": "132.226.14.77",
+    "config": "hysteria2://my_super_password_123@open.w2m.ink:5443/?sni=open.w2m.ink"
+  },
+  {
+    "name": "South Korea 1",
+    "countryCode": "KR",
+    "ip": "152.67.200.82",
+    "config": "hysteria2://3d7634af8cb2c6cb4bac1c0efad8b43d@152.67.200.82:50160/?sni=152-67-200-82.liao.kdns.fr"
+  },
+  {
+    "name": "Netherlands 1",
+    "countryCode": "NL",
+    "ip": "109.235.49.234",
+    "config": "hysteria2://529f1911-04d5-4427-94b9-c851fd459a27@nl-hy-test.tcp-reset-club.net:443/?sni=tcp-reset-club.net"
+  },
+  {
+    "name": "Netherlands 2",
+    "countryCode": "NL",
+    "ip": "77.74.123.103",
+    "config": "hysteria2://s0_sdK93x9wer_D02Lz9cvK3_Sa014Oakl_C2z@77.74.123.103:8443/?sni=grape-test-italy.dynuddns.net"
+  },
+  {
+    "name": "Netherlands 3",
+    "countryCode": "NL",
+    "ip": "77.74.123.104",
+    "config": "hysteria2://s0_sdK93x9wer_D02Lz9cvK3_Sa014Oakl_C2z@77.74.123.104:8443/?sni=grape-test-italy.dynuddns.net"
+  },
+  {
+    "name": "Russia 1",
+    "countryCode": "RU",
+    "ip": "103.88.243.142",
+    "config": "hysteria2://41edb44c8e@103.88.243.142:11592/?sni=srv-17e124.21freedom.net"
+  },
+  {
+    "name": "United States 1",
+    "countryCode": "US",
+    "ip": "155.248.209.237",
+    "config": "hysteria2://bce6c821-200d-421f-bf3d-7159e5246ea0@hy2.123266.xyz:33333/?sni=hy2.123266.xyz"
+  },
+  {
+    "name": "United States 2",
+    "countryCode": "US",
+    "ip": "142.249.37.90",
+    "config": "hysteria2://dongtaiwang.com@142.249.37.90:44356/?sni=hy2.561891.xyz"
+  },
+  {
+    "name": "United States 3",
+    "countryCode": "US",
+    "ip": "142.249.37.90",
+    "config": "hysteria2://dongtaiwang.com@hy2.561891.xyz:44356/?sni=hy2.561891.xyz"
+  }
+]
