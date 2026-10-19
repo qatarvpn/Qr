@@ -7,7 +7,7 @@
   {
     "name": "Germany 1",
     "countryCode": "DE",
-    "config": "hysteria2://mkL3AfdSZIpTWRB9TcWPn9vywPGN89MRHg3ToRDj@64.188.98.171:443/?sni=germany3.h2corp.local&insecure=1"
+    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@vpn-de-002.fastervpn.world:443/?sni=127.0.0.1&insecure=1"
   },
   {
     "name": "Germany 2",
@@ -67,32 +67,22 @@
   {
     "name": "Hong Kong 1",
     "countryCode": "HK",
-    "config": "hysteria2://44e76f8c-7362-11ec-bb74-f23c9164ca5d@8c05abce-tnhmo0-tohhws-zn8y.hk3.hyhuawei.com:443/?sni=8c05abce-tnhmo0-tohhws-zn8y.hk3.hyhuawei.com&insecure=1"
+    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@202.146.222.174:443/?insecure=1"
   },
   {
     "name": "Hong Kong 2",
     "countryCode": "HK",
-    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@202.146.222.174:443/?insecure=1"
+    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@202.146.222.29:443/?insecure=1"
   },
   {
     "name": "Hong Kong 3",
     "countryCode": "HK",
-    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@202.146.222.29:443/?insecure=1"
+    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@vpn-hk-004.fastervpn.world:443/?sni=vpn-hk-004.fastervpn.world&insecure=1"
   },
   {
     "name": "Hong Kong 4",
     "countryCode": "HK",
-    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@vpn-hk-004.fastervpn.world:443/?sni=vpn-hk-004.fastervpn.world&insecure=1"
-  },
-  {
-    "name": "Hong Kong 5",
-    "countryCode": "HK",
     "config": "hysteria2://b0917015b656b3dd2286b5633af0c5c1@31.57.248.176:50160/?sni=31.57.248.176&insecure=1"
-  },
-  {
-    "name": "Hong Kong 6",
-    "countryCode": "HK",
-    "config": "hysteria2://c594c7ec-8b10-11ef-a2b8-f23c9164ca5d@74a598d0-tnhmo0-toktib-1hhyy.hk3.hyhuawei.com:443/?sni=74a598d0-tnhmo0-toktib-1hhyy.hk3.hyhuawei.com&insecure=1"
   },
   {
     "name": "Japan 1",
@@ -116,6 +106,11 @@
   },
   {
     "name": "Japan 5",
+    "countryCode": "JP",
+    "config": "hysteria2://usqmqUKJFIlCmvkCNSY64L3k@8.209.247.109:443/?sni=8.209.247.109&insecure=1"
+  },
+  {
+    "name": "Japan 6",
     "countryCode": "JP",
     "config": "hysteria2://wvA0PtDIuFbSqooIC2goKzFr@38.175.202.26:443/?sni=bing.com&insecure=1"
   },
@@ -172,7 +167,7 @@
   {
     "name": "Poland 2",
     "countryCode": "PL",
-    "config": "hysteria2://b4c8ee9caa74b7ba0a61@scrap.halyvanedorogo.ru:35076/?sni=scrap.halyvanedorogo.ru&insecure=1"
+    "config": "hysteria2://b4c8ee9caa74b7ba0a61@scrap.halyvanedorogo.ru:35076/?sni=scrap.halyvanedorogo.ru"
   },
   {
     "name": "Romania 1",
@@ -187,15 +182,10 @@
   {
     "name": "Singapore 1",
     "countryCode": "SG",
-    "config": "hysteria2://c594c7ec-8b10-11ef-a2b8-f23c9164ca5d@3f5ca476-tnhmo0-toktib-1hhyy.sg7.hyhuawei.com:443/?sni=3f5ca476-tnhmo0-toktib-1hhyy.sg7.hyhuawei.com&insecure=1"
-  },
-  {
-    "name": "Singapore 2",
-    "countryCode": "SG",
     "config": "hysteria2://f87376e17da040ed04c9665ce8972930@138.2.73.238:50160/?sni=138.2.73.238&insecure=1"
   },
   {
-    "name": "Singapore 3",
+    "name": "Singapore 2",
     "countryCode": "SG",
     "config": "hysteria2://user317_windows%3Ac70565e9-a99f-40ef-b96c-469a3949eed2@s3.huhiuh.space:18642/?sni=s3.huhiuh.space&insecure=1"
   },
@@ -212,7 +202,7 @@
   {
     "name": "Taiwan 3",
     "countryCode": "TW",
-    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@vpn-tw-002.fastervpn.world:443/?sni=127.0.0.1&insecure=1"
+    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@vpn-tw-002.fastervpn.world:443/?sni=css.rbxcdn.com&insecure=1"
   },
   {
     "name": "United States 1",
@@ -227,7 +217,7 @@
   {
     "name": "United States 3",
     "countryCode": "US",
-    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@vpn-us-004.fastervpn.world:443/?sni=vpn-us-004.fastervpn.world&insecure=1"
+    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@vpn-us-001.fastervpn.world:443/?sni=vpn-us-001.fastervpn.world&insecure=1"
   },
   {
     "name": "United States 4",
