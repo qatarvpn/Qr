@@ -7,7 +7,12 @@
   {
     "name": "Germany 1",
     "countryCode": "DE",
-    "config": "hysteria2://miaoge110@5.45.100.100:51511/?sni=www.bing.com&insecure=1"
+    "config": "hysteria2://mkL3AfdSZIpTWRB9TcWPn9vywPGN89MRHg3ToRDj@64.188.98.171:443/?sni=germany3.h2corp.local&insecure=1"
+  },
+  {
+    "name": "Finland 1",
+    "countryCode": "FI",
+    "config": "hysteria2://d5530551-5e9a-4ac5-8539-cee87e38d9e2@2.26.3.75:443/?sni=fi.67chat.ru"
   },
   {
     "name": "France 1",
@@ -17,15 +22,15 @@
   {
     "name": "France 2",
     "countryCode": "FR",
+    "config": "hysteria2://github.com%2FAlvin9999-newpac%2Ffanqiang@62.210.147.2:43115/?sni=www.microsoft.com&insecure=1"
+  },
+  {
+    "name": "France 3",
+    "countryCode": "FR",
     "config": "hysteria2://github.com%2FAlvin9999-newpac%2Ffanqiang@62.210.7.139:60111/?sni=62.210.7.139&insecure=1"
   },
   {
     "name": "United Kingdom 1",
-    "countryCode": "GB",
-    "config": "hysteria2://b3a11068-1a7e-4643-85de-7c82cce46943@191.215.46.37:443/?sni=uk.shamanapp.online&insecure=1"
-  },
-  {
-    "name": "United Kingdom 2",
     "countryCode": "GB",
     "config": "hysteria2://b3a11068-1a7e-4643-85de-7c82cce46943@uk-d9ca48498a.shamanapp.online:443/?sni=uk-d9ca48498a.shamanapp.online&insecure=1"
   },
@@ -45,6 +50,11 @@
     "config": "hysteria2://b0917015b656b3dd2286b5633af0c5c1@31.57.248.176:50160/?sni=31.57.248.176&insecure=1"
   },
   {
+    "name": "Hong Kong 4",
+    "countryCode": "HK",
+    "config": "hysteria2://r5uI9R8L6vw5vhtXT4EU9O5XCbHWePj1@191.223.209.245:8443/?sni=www.microsoft.com&insecure=1"
+  },
+  {
     "name": "Japan 1",
     "countryCode": "JP",
     "config": "hysteria2://184cdec28da5a09450803c8debcd2cc9@138.3.208.26:50160/?sni=1&insecure=1"
@@ -62,7 +72,7 @@
   {
     "name": "Japan 4",
     "countryCode": "JP",
-    "config": "hysteria2://u63SxILNwtrQZ7Y1ZrFaZfsA@8.211.175.236:8443/?sni=bing.com&insecure=1"
+    "config": "hysteria2://u63SxILNwtrQZ7Y1ZrFaZfsA@8.211.175.236:8443/?sni=8.211.175.236&insecure=1"
   },
   {
     "name": "Japan 5",
@@ -92,7 +102,7 @@
   {
     "name": "South Korea 5",
     "countryCode": "KR",
-    "config": "hysteria2://9cfc9458e48c028ec03ff86ebc71c744@150-230-252-217.liao.kdns.fr:50160/?sni=150-230-252-217.liao.kdns.fr"
+    "config": "hysteria2://9cfc9458e48c028ec03ff86ebc71c744@150-230-252-217.liao.kdns.fr:50160/?sni=150-230-252-217.liao.kdns.fr&insecure=1"
   },
   {
     "name": "South Korea 6",
@@ -102,22 +112,22 @@
   {
     "name": "Netherlands 1",
     "countryCode": "NL",
-    "config": "hysteria2://529f1911-04d5-4427-94b9-c851fd459a27@nl-hy-test.tcp-reset-club.net:443/?sni=nl-hy-test.tcp-reset-club.net"
+    "config": "hysteria2://529f1911-04d5-4427-94b9-c851fd459a27@109.235.49.234:443/?sni=tcp-reset-club.net&insecure=1"
   },
   {
     "name": "Netherlands 2",
     "countryCode": "NL",
-    "config": "hysteria2://dd50a499-7e43-4589-8490-f3b9c2451473@109.235.49.234:443/?sni=tcp-reset-club.net&insecure=1"
+    "config": "hysteria2://529f1911-04d5-4427-94b9-c851fd459a27@nl-hy-test.tcp-reset-club.net:443/?sni=nl-hy-test.tcp-reset-club.net"
   },
   {
     "name": "Netherlands 3",
     "countryCode": "NL",
-    "config": "hysteria2://dd50a499-7e43-4589-8490-f3b9c2451473@nl-hy-test.tcp-reset-club.net:443/?sni=nl-hy-test.tcp-reset-club.net"
+    "config": "hysteria2://dd50a499-7e43-4589-8490-f3b9c2451473@109.235.49.234:443/?sni=109.235.49.234&insecure=1"
   },
   {
     "name": "Netherlands 4",
     "countryCode": "NL",
-    "config": "hysteria2://gf1%3Agfhysteria2024@5.129.235.85:443/?sni=t.me&insecure=1"
+    "config": "hysteria2://gf1%3Agfhysteria2024@5.129.235.85:443/?sni=5.129.235.85&insecure=1"
   },
   {
     "name": "Romania 1",
@@ -127,7 +137,7 @@
   {
     "name": "Singapore 1",
     "countryCode": "SG",
-    "config": "hysteria2://f87376e17da040ed04c9665ce8972930@138.2.73.238:50160/?sni=off&insecure=1"
+    "config": "hysteria2://f87376e17da040ed04c9665ce8972930@138.2.73.238:50160/?sni=138.2.73.238&insecure=1"
   },
   {
     "name": "Taiwan 1",
@@ -177,6 +187,6 @@
   {
     "name": "United States 7",
     "countryCode": "US",
-    "config": "hysteria2://gf1%3Agfhysteria2024@66.94.121.46:443/?sni=66.94.121.46&insecure=1"
+    "config": "hysteria2://pbgLTkd5276SN1sZ@144.24.46.175:8443/?sni=www.bing.com&insecure=1"
   }
 ]
