@@ -102,10 +102,15 @@
   {
     "name": "South Korea 2",
     "countryCode": "KR",
-    "config": "hysteria2://3d7634af8cb2c6cb4bac1c0efad8b43d@152.67.200.82:50160/?sni=152-67-200-82.liao.kdns.fr&insecure=1"
+    "config": "hysteria2://1beb216e3f60aea9555dae60d219a5ca@152.69.231.175:50160/?sni=152.69.231.175&insecure=1"
   },
   {
     "name": "South Korea 3",
+    "countryCode": "KR",
+    "config": "hysteria2://3d7634af8cb2c6cb4bac1c0efad8b43d@152.67.200.82:50160/?sni=152-67-200-82.liao.kdns.fr&insecure=1"
+  },
+  {
+    "name": "South Korea 4",
     "countryCode": "KR",
     "config": "hysteria2://maintell@152.70.237.123:2053/?sni=152.70.237.123&insecure=1"
   },
@@ -162,40 +167,25 @@
   {
     "name": "United States 4",
     "countryCode": "US",
-    "config": "hysteria2://4fUg3KH31LpMhko6o0Ka9Q@198.46.146.118:36720/?sni=bing.com&insecure=1"
+    "config": "hysteria2://bce6c821-200d-421f-bf3d-7159e5246ea0@155.248.209.237:33333/?sni=155.248.209.2&insecure=1"
   },
   {
     "name": "United States 5",
     "countryCode": "US",
-    "config": "hysteria2://7c9c7f52-5a8c-43e0-b6d1-c8552289f230@167.148.201.99:443/?sni=us.mi11o4ka.com"
+    "config": "hysteria2://bce6c821-200d-421f-bf3d-7159e5246ea0@hy2.123266.xyz:33333/?sni=hy2.123266.xyz&insecure=1"
   },
   {
     "name": "United States 6",
     "countryCode": "US",
-    "config": "hysteria2://7c9c7f52-5a8c-43e0-b6d1-c8552289f230@us.mi11o4ka.com:443/?sni=us.mi11o4ka.com"
+    "config": "hysteria2://ee78c844-83b6-4508-b1f9-b3f00c8e0556@167.148.201.99:443/?sni=us.mi11o4ka.com"
   },
   {
     "name": "United States 7",
     "countryCode": "US",
-    "config": "hysteria2://bce6c821-200d-421f-bf3d-7159e5246ea0@155.248.209.237:33333/?sni=155.248.209.2&insecure=1"
-  },
-  {
-    "name": "United States 8",
-    "countryCode": "US",
-    "config": "hysteria2://bce6c821-200d-421f-bf3d-7159e5246ea0@hy2.123266.xyz:33333/?sni=hy2.123266.xyz&insecure=1"
-  },
-  {
-    "name": "United States 9",
-    "countryCode": "US",
-    "config": "hysteria2://ee78c844-83b6-4508-b1f9-b3f00c8e0556@167.148.201.99:443/?sni=us.mi11o4ka.com"
-  },
-  {
-    "name": "United States 10",
-    "countryCode": "US",
     "config": "hysteria2://ee78c844-83b6-4508-b1f9-b3f00c8e0556@us.mi11o4ka.com:443/?sni=us.mi11o4ka.com"
   },
   {
-    "name": "United States 11",
+    "name": "United States 8",
     "countryCode": "US",
     "config": "hysteria2://gf1%3Agfhysteria2024@66.94.121.46:443/?sni=66.94.121.46&insecure=1"
   }
