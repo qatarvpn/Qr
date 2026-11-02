@@ -117,11 +117,6 @@
   {
     "name": "Netherlands 1",
     "countryCode": "NL",
-    "config": "hysteria2://6da2c981-8c77-4340-bda3-93399b7aea26@store.blog-forme.ru:443/?sni=store.blog-forme.ru"
-  },
-  {
-    "name": "Netherlands 2",
-    "countryCode": "NL",
     "config": "hysteria2://d4ca9415f0eac7897472e1e5b86d2e96@promo.betust.net:443/?sni=promo.betust.net"
   },
   {
@@ -171,16 +166,6 @@
   },
   {
     "name": "United States 5",
-    "countryCode": "US",
-    "config": "hysteria2://ee78c844-83b6-4508-b1f9-b3f00c8e0556@167.148.201.99:443/?sni=us.mi11o4ka.com"
-  },
-  {
-    "name": "United States 6",
-    "countryCode": "US",
-    "config": "hysteria2://ee78c844-83b6-4508-b1f9-b3f00c8e0556@us.mi11o4ka.com:443/?sni=us.mi11o4ka.com"
-  },
-  {
-    "name": "United States 7",
     "countryCode": "US",
     "config": "hysteria2://gf1%3Agfhysteria2024@66.94.121.46:443/?sni=66.94.121.46&insecure=1"
   }
