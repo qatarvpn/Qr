@@ -67,10 +67,15 @@
   {
     "name": "Japan 2",
     "countryCode": "JP",
-    "config": "hysteria2://u63SxILNwtrQZ7Y1ZrFaZfsA@8.211.175.236:8443/?sni=8.211.175.236&insecure=1"
+    "config": "hysteria2://STYyftThFn@freedom.chenlan.top:12765/?sni=freedom.chenlan.top"
   },
   {
     "name": "Japan 3",
+    "countryCode": "JP",
+    "config": "hysteria2://u63SxILNwtrQZ7Y1ZrFaZfsA@8.211.175.236:8443/?sni=8.211.175.236&insecure=1"
+  },
+  {
+    "name": "Japan 4",
     "countryCode": "JP",
     "config": "hysteria2://usqmqUKJFIlCmvkCNSY64L3k@8.209.247.109:443/?sni=bing.com&insecure=1"
   },
