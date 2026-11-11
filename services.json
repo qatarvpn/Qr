@@ -42,15 +42,10 @@
   {
     "name": "Hong Kong 2",
     "countryCode": "HK",
-    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@202.146.222.29:443/?insecure=1"
-  },
-  {
-    "name": "Hong Kong 3",
-    "countryCode": "HK",
     "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@202.146.222.89:443/?insecure=1"
   },
   {
-    "name": "Hong Kong 4",
+    "name": "Hong Kong 3",
     "countryCode": "HK",
     "config": "hysteria2://b0917015b656b3dd2286b5633af0c5c1@31.57.248.176:50160/?sni=www.bing.com%2523%25e9%25a6%2583%25e5%259a%259f%25e9%25a6%2583%25e5%259a%25a2%257chk%257c%2540wxgqlfx%257c147&insecure=1"
   },
@@ -63,6 +58,11 @@
     "name": "Japan 2",
     "countryCode": "JP",
     "config": "hysteria2://u63SxILNwtrQZ7Y1ZrFaZfsA@8.211.175.236:8443/?sni=8.211.175.236&insecure=1"
+  },
+  {
+    "name": "Japan 3",
+    "countryCode": "JP",
+    "config": "hysteria2://usqmqUKJFIlCmvkCNSY64L3k@8.209.247.109:443/?sni=bing.com&insecure=1"
   },
   {
     "name": "South Korea 1",
