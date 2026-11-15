@@ -1,10 +1,5 @@
 [
   {
-    "name": "Switzerland 1",
-    "countryCode": "CH",
-    "config": "hysteria2://84a506ca5aca505696a454d828420b3f@140.238.213.114:50160/?sni=off&insecure=1"
-  },
-  {
     "name": "Germany 1",
     "countryCode": "DE",
     "config": "hysteria2://23c82941-70f4-4381-90db-bd28e9a902e9@steel7.hadsvpn.com:443/?sni=steel7.hadsvpn.com"
@@ -103,16 +98,6 @@
     "name": "Taiwan 1",
     "countryCode": "TW",
     "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@103.115.109.49:443/?insecure=1"
-  },
-  {
-    "name": "Taiwan 2",
-    "countryCode": "TW",
-    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@160.187.100.109:443/?sni=127.0.0.1&insecure=1"
-  },
-  {
-    "name": "Taiwan 3",
-    "countryCode": "TW",
-    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@vpn-tw-002.fastervpn.world:443/?sni=127.0.0.1&insecure=1"
   },
   {
     "name": "United States 1",
