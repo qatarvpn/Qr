@@ -72,7 +72,7 @@
   {
     "name": "South Korea 3",
     "countryCode": "KR",
-    "config": "hysteria2://3d7634af8cb2c6cb4bac1c0efad8b43d@152.67.200.82:50160/?sni=152.67.200.82&insecure=1"
+    "config": "hysteria2://3d7634af8cb2c6cb4bac1c0efad8b43d@152.67.200.82:50160/?sni=152-67-200-82.liao.kdns.fr&insecure=1"
   },
   {
     "name": "South Korea 4",
@@ -93,16 +93,6 @@
     "name": "Taiwan 1",
     "countryCode": "TW",
     "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@103.115.109.49:443/?insecure=1"
-  },
-  {
-    "name": "Taiwan 2",
-    "countryCode": "TW",
-    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@160.187.100.109:443/?sni=127.0.0.1&insecure=1"
-  },
-  {
-    "name": "Taiwan 3",
-    "countryCode": "TW",
-    "config": "hysteria2://H7mP2xY9kJ4nQ8wR5tF6vB3z@vpn-tw-002.fastervpn.world:443/?sni=127.0.0.1&insecure=1"
   },
   {
     "name": "United States 1",
